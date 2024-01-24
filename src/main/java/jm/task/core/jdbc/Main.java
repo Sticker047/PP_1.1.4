@@ -13,13 +13,17 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         // реализуйте алгоритм здесь
         UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
-//        userDaoJDBC.createUsersTable();
-//        userDaoJDBC.dropUsersTable();
-        userDaoJDBC.saveUser("Name", "LastName", (byte) 20);
 
-//        final List<User> users = userDaoJDBC.getAllUsers();
-//        System.out.println(users.size());
-//        System.out.println(users.get(0));
+        userDaoJDBC.createUsersTable();
+
+        userDaoJDBC.saveUser("Иван", "Иванов", (byte) 20);
+        userDaoJDBC.saveUser("Петр", "Петров", (byte) 20);
+        userDaoJDBC.saveUser("Сидор", "Сидоров", (byte) 20);
+        userDaoJDBC.saveUser("Василий", "Васечкин", (byte) 20);
+
+        userDaoJDBC.getAllUsers().forEach(System.out::println);
+        userDaoJDBC.cleanUsersTable();
+        userDaoJDBC.dropUsersTable();
 
     }
 }

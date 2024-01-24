@@ -31,8 +31,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 "    age INTEGER\n" +
                 ")";
 
-        final int i = executeUpdate(usersTableQuery);
-        System.out.println("i = " + i);
+        executeUpdate(usersTableQuery);
     }
 
     public void dropUsersTable() {
@@ -47,7 +46,6 @@ public class UserDaoJDBCImpl implements UserDao {
             statement.setString(2, lastName);
             statement.setInt(3, age);
             statement.executeUpdate();
-            System.out.println("Record created.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,7 +57,6 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement statement = Util.getConnection().prepareStatement(sql);
             statement.setLong(1, id);
             statement.executeUpdate();
-            System.out.println("Record deleted.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,7 +83,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         try {
             final Statement statement = Util.getConnection().createStatement();
-            statement.executeQuery("DELETE * FROM users");
+            statement.executeUpdate("DELETE FROM users");
         } catch (SQLException e) {
             e.printStackTrace();
         }
