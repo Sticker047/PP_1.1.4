@@ -14,20 +14,23 @@ public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
     }
 
+    //todo: Statement - Autocloseable, помещаем в try_with_resources в кач.ресурса
+
 
     private int executeUpdate(String query) {
         try {
-            Statement statement = Util.getConnection().createStatement();
+            Statement statement = Util.getConnection().createStatement(); //todo: создаем поле - единую точку обращения - Connection в классе, инициализируем через конструктор
             int result = statement.executeUpdate(query);
             return result;
         } catch (SQLException e) {
-            return 0;
+            return 0;//todo: ??
         }
     }
 
 
 
     public void createUsersTable() {
+        //todo: выносим константы из тела методов, именование констант - заглавными letter
         String usersTableQuery = "CREATE TABLE users (\n" +
                 "    id INTEGER AUTO_INCREMENT PRIMARY KEY, \n" +
                 "    firstname VARCHAR(30), \n" +

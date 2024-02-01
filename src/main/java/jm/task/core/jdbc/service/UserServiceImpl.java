@@ -7,7 +7,8 @@ import jm.task.core.jdbc.model.User;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private UserDao userDao = new UserDaoJDBCImpl();
+
+    private UserDao userDao = new UserDaoJDBCImpl();//todo: инициализация переменной - через constructor
 
     public UserServiceImpl() {
 
@@ -15,7 +16,7 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
-    }
+    }//todo: именно в service - должны быть логи (их иммитация через sout)
 
     public void createUsersTable() {
         userDao.createUsersTable();
