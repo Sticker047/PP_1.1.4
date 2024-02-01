@@ -10,6 +10,11 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
+    //todo: codeStyle ..это очень необычно, constructor - вверху класса
+    public UserDaoJDBCImpl() {
+    }
+
+
     private int executeUpdate(String query) {
         try {
             Statement statement = Util.getConnection().createStatement();
@@ -20,8 +25,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public UserDaoJDBCImpl() {
-    }
+
 
     public void createUsersTable() {
         String usersTableQuery = "CREATE TABLE users (\n" +
