@@ -2,43 +2,36 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import org.w3c.dom.ls.LSOutput;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
+    private static final String USERS_TABLE_QUERY = "CREATE TABLE users (\n" +
+            "    id INTEGER AUTO_INCREMENT PRIMARY KEY, \n" +
+            "    firstname VARCHAR(30), \n" +
+            "    lastname VARCHAR(30), \n" +
+            "    age INTEGER\n" +
+            ")";
+    private final Connection connection;
 
-    //todo: codeStyle ..это очень необычно, constructor - вверху класса
     public UserDaoJDBCImpl() {
+        connection = new Util().getConnection();
     }
 
-    //todo: Statement - Autocloseable, помещаем в try_with_resources в кач.ресурса
-
-
     private int executeUpdate(String query) {
-        try {
-            Statement statement = Util.getConnection().createStatement(); //todo: создаем поле - единую точку обращения - Connection в классе, инициализируем через конструктор
-            int result = statement.executeUpdate(query);
-            return result;
+        try (Statement statement = connection.createStatement()) {
+            return statement.executeUpdate(query);
         } catch (SQLException e) {
-            return 0;//todo: ??
+            System.err.println("Ошибка при выполнении запроса:/n" + query);
+            return 0;
         }
     }
 
 
-
     public void createUsersTable() {
-        //todo: выносим константы из тела методов, именование констант - заглавными letter
-        String usersTableQuery = "CREATE TABLE users (\n" +
-                "    id INTEGER AUTO_INCREMENT PRIMARY KEY, \n" +
-                "    firstname VARCHAR(30), \n" +
-                "    lastname VARCHAR(30), \n" +
-                "    age INTEGER\n" +
-                ")";
-
-        executeUpdate(usersTableQuery);
+        executeUpdate(USERS_TABLE_QUERY);
     }
 
     public void dropUsersTable() {
@@ -48,7 +41,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try {
             String sql = "INSERT INTO users (firstname, lastname, age) VALUES (?, ?, ?)";
-            PreparedStatement statement = Util.getConnection().prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setInt(3, age);
@@ -61,7 +54,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         try {
             String sql = "DELETE FROM users WHERE id = ?";
-            PreparedStatement statement = Util.getConnection().prepareStatement(sql);
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -72,7 +65,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try {
-            final Statement statement = Util.getConnection().createStatement();
+            final Statement statement = connection.createStatement();
             final ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
             while (resultSet.next()) {
                 users.add(new User(
@@ -89,7 +82,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try {
-            final Statement statement = Util.getConnection().createStatement();
+            final Statement statement = connection.createStatement();
             statement.executeUpdate("DELETE FROM users");
         } catch (SQLException e) {
             e.printStackTrace();

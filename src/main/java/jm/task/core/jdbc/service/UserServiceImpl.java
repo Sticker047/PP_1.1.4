@@ -3,20 +3,22 @@ package jm.task.core.jdbc.service;
 import jm.task.core.jdbc.dao.UserDao;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao = new UserDaoJDBCImpl();//todo: инициализация переменной - через constructor
+    private UserDao userDao;
 
     public UserServiceImpl() {
-
+        userDao = new UserDaoJDBCImpl();
     }
 
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
-    }//todo: именно в service - должны быть логи (их иммитация через sout)
+        System.out.println("user has been created: " + userDao);
+    }
 
     public void createUsersTable() {
         userDao.createUsersTable();

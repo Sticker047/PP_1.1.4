@@ -5,21 +5,21 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    // реализуйте настройку соеденения с БД//todo: ?? лишние комменты
+    private static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/usersdb";
+    private static final String CONNECTION_USER = "root";
+    private static final String CONNECTION_PASSWORD = "password";
     private static Connection connection;
 
-    public static Connection getConnection() {//todo: избавляемтся от static - так мы ломаем парадигму ООП
+    public Connection getConnection() {
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/usersdb",
-                        "root",
-                        "password"//todo: выносим константы, описано как..
+                        CONNECTION_URL,
+                        CONNECTION_USER,
+                        CONNECTION_PASSWORD
                 );
             } catch (SQLException e) {
-                //todo: если в дальнейшей работе приложения нет смысла - роняем его:
-                throw new RuntimeException("... .. .. : " + e.getMessage());
-//                e.printStackTrace();
+                throw new RuntimeException("Error during connecting to DB: " + e.getMessage());
             }
         }
         return connection;
